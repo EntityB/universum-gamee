@@ -34,6 +34,7 @@ CanvasHolder.prototype = {
                 break;
             case "low":
                 c = 0.25;
+                break;
             default: // medium expected
                 c = 0.5;
         }
@@ -137,7 +138,7 @@ WebGLGameFrame.prototype.draw = function () {
 
         this.gl.vertexAttribPointer(positionLocation, 2, this.gl.FLOAT, false, 0, 0);
         this.gl.drawArrays(this.gl.TRIANGLES, 0, 6);
-    }
+    };
 
     this.draw();
 };
@@ -159,7 +160,7 @@ RenderBuffer.prototype.getData = function () {
 
 function ShaderToyGameFrame() {
     WebGLGameFrame.call(this);
-};
+}
 
 ShaderToyGameFrame.prototype = Object.create(WebGLGameFrame.prototype);
 
@@ -194,8 +195,8 @@ ShaderToyGameFrame.prototype.initChannels = function () {
 
 ShaderToyGameFrame.prototype.initUniforms = function () {
     this.uniforms = {};
-    this.uniforms["static"] = {};
-    this.uniforms["dynamic"] = {};
+    this.uniforms.static = {};
+    this.uniforms.dynamic = {};
 };
 
 ShaderToyGameFrame.prototype.initShaderToyUniforms = function () {
@@ -301,26 +302,26 @@ ShaderToyGameFrame.prototype.configureUniform = function (name, uniformType, val
     } else {
         valueGetter = function () {
             return value;
-        }
+        };
     }
 
     this.uniforms[mutability][name] = {
         getValue: valueGetter,
         uniformType: uniformType
-    }
+    };
 
 };
 
 ShaderToyGameFrame.prototype.setStaticUniforms = function () {
     var key;
-    for (key in this.uniforms["static"]) {
+    for (key in this.uniforms.static) {
         this._setUniform(key, "static");
     }
 };
 
 ShaderToyGameFrame.prototype.setDynamicUniforms = function () {
     var key;
-    for (key in this.uniforms["dynamic"]) {
+    for (key in this.uniforms.dynamic) {
         this._setUniform(key, "dynamic");
     }
 };
@@ -394,7 +395,7 @@ ShaderToyGameFrame.prototype.getGameTime = function () {
     var time = (new Date()).getTime();
     this.getGameTime = function () {
         return ((new Date()).getTime() - time) * 0.001;
-    }
+    };
     return 0;
 };
 
@@ -493,14 +494,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 }`;
 
     ShaderToyGameFrame.call(this);
-};
+}
 
 SimplicityGalaxy.prototype = Object.create(ShaderToyGameFrame.prototype);
 
 SimplicityGalaxy.prototype.run = function () {
     this.canvasHolder.setDetail("high");
     ShaderToyGameFrame.prototype.run.call(this);
-}
+};
 
 
 window.addEventListener("load", function windowLoaded() {
