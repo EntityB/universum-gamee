@@ -1,2 +1,7 @@
-/bower_components
-/node_modules
+bower_components/*
+!bower_components/gamee-js/
+
+bower_components/gamee-js/*
+!bower_components/gamee-js/dist/
+
+node_modules
