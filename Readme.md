@@ -1,3 +1,6 @@
+Universum
+=========
+
 Installation
 ------------
 
@@ -10,7 +13,9 @@ grunt
 Run
 ---
 
+```bash
 python -m SimpleHTTPServer 8081
+```
 
 enter localhost:
 [http://localhost:8081](http://localhost:8081)
