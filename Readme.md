@@ -20,6 +20,8 @@ python -m SimpleHTTPServer 8081
 enter localhost:
 [http://localhost:8081](http://localhost:8081)
 
+Alternative with github cdn:
+[https://cdn.rawgit.com/EntityB/universum-gamee/master/index.html](https://cdn.rawgit.com/EntityB/universum-gamee/master/index.html)
 
 TODO
 ----
