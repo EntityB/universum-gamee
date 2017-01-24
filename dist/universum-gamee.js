@@ -1,15 +1,10 @@
-function GameFrame() {
-    this.init();
-}
-
-GameFrame.prototype = {
-    init: function () {
-        this.canvasHolder = new CanvasHolder(640, 640);
-        document.body.appendChild(this.canvasHolder.canvas);
-    }
-};
-
-
+//#### src/CanvasHolder.js
+/**
+ * 
+ * @class CanvasHolder
+ * @param {any} opt_dimensionX
+ * @param {any} opt_dimensionY
+ */
 function CanvasHolder(opt_dimensionX, opt_dimensionY) {
     this.dimension = [
         opt_dimensionX || 300,
@@ -19,6 +14,9 @@ function CanvasHolder(opt_dimensionX, opt_dimensionY) {
 }
 
 CanvasHolder.prototype = {
+    /**
+     * 
+     */
     init: function () {
         var canvas;
         canvas = document.createElement("canvas");
@@ -26,6 +24,11 @@ CanvasHolder.prototype = {
         canvas.style.height = this.dimension[1];
         this.canvas = canvas;
     },
+    /**
+     * 
+     * 
+     * @param {any} detail
+     */
     setDetail: function (detail) {
         var c;
         switch (detail) {
@@ -41,18 +44,53 @@ CanvasHolder.prototype = {
         this.canvas.width = this.dimension[0] * c;
         this.canvas.height = this.dimension[1] * c;
     },
+    /**
+     * 
+     * 
+     * @returns
+     */
     getContext: function () {
         return this.canvas.getContext("webgl");
     }
 };
 
+//#### src/GameFrame.js
+/**
+ * @class GameFrame
+ */
+function GameFrame() {
+    this.init();
+}
 
+GameFrame.prototype = {
+    /**
+     * 
+     */
+    init: function () {
+        this.canvasHolder = new CanvasHolder(640, 640);
+        document.body.appendChild(this.canvasHolder.canvas);
+    }
+};
+
+//#### src/main.js
+window.addEventListener("load", function windowLoaded() {
+    new SimplicityGalaxy();
+});
+
+//#### src/WebGLGameFrame.js
+/**
+ * @class WebGLGameFrame
+ * @requires GameFrame
+ */
 function WebGLGameFrame() {
     GameFrame.call(this);
 }
 
 WebGLGameFrame.prototype = Object.create(GameFrame.prototype);
 
+/**
+ * 
+ */
 WebGLGameFrame.prototype.init = function () {
     GameFrame.prototype.init.call(this);
     this.gl = this.canvasHolder.getContext();
@@ -60,10 +98,20 @@ WebGLGameFrame.prototype.init = function () {
     this.run();
 };
 
+/**
+ * 
+ */
 WebGLGameFrame.prototype.initPrograms = function () {
     this.makeGLProgram();
 };
 
+/**
+ * 
+ * 
+ * @param {any} source
+ * @param {any} shaderType
+ * @returns
+ */
 WebGLGameFrame.prototype._getShader = function (source, shaderType) {
     var shader = this.gl.createShader(shaderType);
 
@@ -78,6 +126,12 @@ WebGLGameFrame.prototype._getShader = function (source, shaderType) {
     return shader;
 };
 
+/**
+ * 
+ * 
+ * @param {any} vsSource
+ * @param {any} fsSource
+ */
 WebGLGameFrame.prototype.makeGLProgram = function (vsSource, fsSource) {
     vsSource = vsSource ||
         `attribute vec2 a_pos;
@@ -109,14 +163,23 @@ void main(void) {
     this.shaderProgram = shaderProgram;
 };
 
+/**
+ * 
+ */
 WebGLGameFrame.prototype.viewPortAll = function () {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 };
 
+/**
+ * 
+ */
 WebGLGameFrame.prototype.clear = function () {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 };
 
+/**
+ * 
+ */
 WebGLGameFrame.prototype.draw = function () {
     // set buffer
     var positionLocation = this.gl.getAttribLocation(this.shaderProgram, "a_pos");
@@ -131,6 +194,9 @@ WebGLGameFrame.prototype.draw = function () {
         1.0, 1.0,
     ]), this.gl.STATIC_DRAW);
 
+    /**
+     * 
+     */
     this.draw = function () {
         // draw
         this.gl.enableVertexAttribArray(positionLocation);
@@ -143,6 +209,9 @@ WebGLGameFrame.prototype.draw = function () {
     this.draw();
 };
 
+/**
+ * 
+ */
 WebGLGameFrame.prototype.run = function () {
     this.viewPortAll();
     this.clear();
@@ -150,20 +219,35 @@ WebGLGameFrame.prototype.run = function () {
 };
 
 
+/**
+ * 
+ */
 function RenderBuffer() {
 }
 
+/**
+ * 
+ * 
+ * @returns
+ */
 RenderBuffer.prototype.getData = function () {
     return 0;
 };
 
-
+//#### src/ShaderToyGameFrame.js
+/**
+ * @class ShaderToyGameFrame
+ * @requires WebGLGameFrame
+ */
 function ShaderToyGameFrame() {
     WebGLGameFrame.call(this);
 }
 
 ShaderToyGameFrame.prototype = Object.create(WebGLGameFrame.prototype);
 
+/**
+ * 
+ */
 ShaderToyGameFrame.prototype.run = function () {
     this.initChannels();
     this.initUniforms();
@@ -173,6 +257,9 @@ ShaderToyGameFrame.prototype.run = function () {
     this.tick();
 };
 
+/**
+ * 
+ */
 ShaderToyGameFrame.prototype.tick = function () {
     this.setDynamicUniforms();
     this.clear();
@@ -180,6 +267,9 @@ ShaderToyGameFrame.prototype.tick = function () {
     setTimeout(this.tick.bind(this), 0);
 };
 
+/**
+ * 
+ */
 ShaderToyGameFrame.prototype.initChannels = function () {
     // TODO
     // this should work with render buffer object or another type of buffer
@@ -193,12 +283,18 @@ ShaderToyGameFrame.prototype.initChannels = function () {
 };
 
 
+/**
+ * 
+ */
 ShaderToyGameFrame.prototype.initUniforms = function () {
     this.uniforms = {};
     this.uniforms.static = {};
     this.uniforms.dynamic = {};
 };
 
+/**
+ * 
+ */
 ShaderToyGameFrame.prototype.initShaderToyUniforms = function () {
     var shaderToyUniforms, key;
 
@@ -292,6 +388,13 @@ ShaderToyGameFrame.prototype.initShaderToyUniforms = function () {
     }
 };
 
+/**
+ * 
+ * 
+ * @param {any} name
+ * @param {any} uniformType
+ * @param {any} value
+ */
 ShaderToyGameFrame.prototype.configureUniform = function (name, uniformType, value) {
     var mutability = "static";
     var valueGetter;
@@ -300,6 +403,11 @@ ShaderToyGameFrame.prototype.configureUniform = function (name, uniformType, val
         mutability = "dynamic";
         valueGetter = value;
     } else {
+        /**
+         * 
+         * 
+         * @returns
+         */
         valueGetter = function () {
             return value;
         };
@@ -312,6 +420,9 @@ ShaderToyGameFrame.prototype.configureUniform = function (name, uniformType, val
 
 };
 
+/**
+ * 
+ */
 ShaderToyGameFrame.prototype.setStaticUniforms = function () {
     var key;
     for (key in this.uniforms.static) {
@@ -319,6 +430,9 @@ ShaderToyGameFrame.prototype.setStaticUniforms = function () {
     }
 };
 
+/**
+ * 
+ */
 ShaderToyGameFrame.prototype.setDynamicUniforms = function () {
     var key;
     for (key in this.uniforms.dynamic) {
@@ -326,6 +440,12 @@ ShaderToyGameFrame.prototype.setDynamicUniforms = function () {
     }
 };
 
+/**
+ * 
+ * 
+ * @param {any} name
+ * @param {any} mutability
+ */
 ShaderToyGameFrame.prototype._setUniform = function (name, mutability) {
     var uniformLocation = this.gl.getUniformLocation(this.shaderProgram, name);
     var value = this.uniforms[mutability][name].getValue();
@@ -342,6 +462,9 @@ ShaderToyGameFrame.prototype._setUniform = function (name, mutability) {
     this.gl[uniformType].apply(this.gl, input);
 };
 
+/**
+ * 
+ */
 ShaderToyGameFrame.prototype.initPrograms = function () {
     body = this.fsSource ||
         `void mainImage( out vec4 fragColor, in vec2 fragCoord )
@@ -391,19 +514,38 @@ void main( void ){
     this.makeGLProgram(undefined, fsSource);
 };
 
+/**
+ * 
+ * 
+ * @returns
+ */
 ShaderToyGameFrame.prototype.getGameTime = function () {
     var time = (new Date()).getTime();
+    /**
+     * 
+     * 
+     * @returns
+     */
     this.getGameTime = function () {
         return ((new Date()).getTime() - time) * 0.001;
     };
     return 0;
 };
 
+/**
+ * 
+ * 
+ * @returns
+ */
 ShaderToyGameFrame.prototype.getMousePosition = function () {
     return [0, 0, 0, 0];
 };
 
-
+//#### src/SimplicityGalaxy.js
+/**
+ * @class SimplicityGalaxy
+ * @requires ShaderToyGameFrame
+ */
 function SimplicityGalaxy() {
 
     this.fsSource =
@@ -498,12 +640,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 
 SimplicityGalaxy.prototype = Object.create(ShaderToyGameFrame.prototype);
 
+/**
+ * 
+ */
 SimplicityGalaxy.prototype.run = function () {
     this.canvasHolder.setDetail("high");
     ShaderToyGameFrame.prototype.run.call(this);
 };
-
-
-window.addEventListener("load", function windowLoaded() {
-    new SimplicityGalaxy();
-});
