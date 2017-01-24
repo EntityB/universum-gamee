@@ -49,6 +49,7 @@ CanvasHolder.prototype = {
      * @returns
      */
     getContext: function () {
-        return this.canvas.getContext("webgl");
+        return WebGLDebugUtils.makeDebugContext(this.canvas.getContext("webgl")); // debugging webgl
+        // return this.canvas.getContext("webgl");
     }
 };

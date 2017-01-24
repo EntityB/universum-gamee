@@ -4,15 +4,15 @@
  */
 function SimplicityGalaxy() {
 
-    this.fsSource =
-        `//CBS
+	this.fsSource =
+		`//CBS
 //Parallax scrolling fractal galaxy.
 //Inspired by JoshP's Simplicity shader: https://www.shadertoy.com/view/lslGWr
 
 // http://www.fractalforums.com/new-theories-and-research/very-simple-formula-for-fractal-patterns/
 float field(in vec3 p,float s) {
 	float strength = 7. + .03 * log(1.e-6 + fract(sin(iGlobalTime) * 4373.11));
-	float accum = s/4.;
+	float accum = s * 0.25;
 	float prev = 0.;
 	float tw = 0.;
 	for (int i = 0; i < 26; ++i) {
@@ -91,7 +91,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
 	fragColor = mix(freqs[3]-.3, 1., v) * vec4(1.5*freqs[2] * t * t* t , 1.2*freqs[1] * t * t, freqs[3]*t, 1.0)+c2+starcolor;
 }`;
 
-    ShaderToyGameFrame.call(this);
+	ShaderToyGameFrame.call(this);
 }
 
 SimplicityGalaxy.prototype = Object.create(ShaderToyGameFrame.prototype);
@@ -100,6 +100,6 @@ SimplicityGalaxy.prototype = Object.create(ShaderToyGameFrame.prototype);
  * 
  */
 SimplicityGalaxy.prototype.run = function () {
-    this.canvasHolder.setDetail("high");
-    ShaderToyGameFrame.prototype.run.call(this);
+	this.canvasHolder.setDetail("high");
+	ShaderToyGameFrame.prototype.run.call(this);
 };

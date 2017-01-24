@@ -17,6 +17,7 @@ ShaderToyGameFrame.prototype.run = function () {
     this.initShaderToyUniforms();
     this.setStaticUniforms();
     this.viewPortAll();
+    this.clear();
     this.tick();
 };
 
@@ -25,9 +26,8 @@ ShaderToyGameFrame.prototype.run = function () {
  */
 ShaderToyGameFrame.prototype.tick = function () {
     this.setDynamicUniforms();
-    this.clear();
     this.draw();
-    setTimeout(this.tick.bind(this), 0);
+    requestAnimationFrame(this.tick.bind(this));
 };
 
 /**
